@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Nando la Nutria!</title>
+    <style>
+        body {
+            background-color: #E0F7FA; /* Azul agua claro */
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            color: #006064;
+            overflow-x: hidden;
+        }
+        h1 { color: #00838F; font-size: 2.8em; text-shadow: 2px 2px white; margin-bottom: 5px; }
+        p { font-size: 1.3em; background: rgba(255,255,255,0.7); display: inline-block; padding: 10px 20px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+        
+        /* Contenedor principal para poner a la nutria al fondo pero visible */
+        #escenario {
+            position: relative;
+            width: 100%;
+            min-height: 80vh;
+            margin-top: 20px;
+        }
+
+        /* Animación de la Nutria Nadadora */
+        #nutria {
+            font-size: 140px;
+            position: absolute;
+            top: 20px;
+            left: 0;
+            /* Animación continua de nadar de un lado a otro */
+            animation: nadar 6s infinite alternate ease-in-out;
+            z-index: -1;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        @keyframes nadar {
+            0% { transform: translate(5vw, 0px) rotate(-15deg); }
+            50% { transform: translate(45vw, 30px) rotate(10deg); }
+            100% { transform: translate(75vw, -10px) rotate(-10deg); }
+        }
+
+        .saltar {
+            animation: saltoFeliz 0.6s ease-out !important;
+        }
+
+        @keyframes saltoFeliz {
+            0% { transform: scale(1) translateY(0) rotate(0deg); }
+            50% { transform: scale(1.3) translateY(-80px) rotate(360deg); }
+            100% { transform: scale(1) translateY(0) rotate(360deg); }
+        }
+
+        /* Botón del Fonema N */
+        .motor {
+            background: linear-gradient(145deg, #FF6F00, #FF8F00);
+            color: white;
+            font-size: 90px;
+            font-weight: bold;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 6px solid #FFF;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 111, 0, 0.4);
+            margin: 40px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: transform 0.1s;
+        }
+
+        .motor:active { transform: scale(0.95); }
+        
+        .vibrar { 
+            animation: shake 0.2s infinite, destello 0.5s infinite alternate; 
+        }
+
+        @keyframes shake {
+            0% { transform: translate(2px, 2px) rotate(0deg); }
+            20% { transform: translate(-4px, 0px) rotate(3deg); }
+            40% { transform: translate(2px, -2px) rotate(1deg); }
+            60% { transform: translate(-4px, 2px) rotate(0deg); }
+            80% { transform: translate(-2px, -2px) rotate(3deg); }
+            100% { transform: translate(2px, -4px) rotate(-2deg); }
+        }
+
+        @keyframes destello {
+            from { box-shadow: 0 0 20px #FF6F00; }
+            to { box-shadow: 0 0 60px #FFD54F, 0 0 20px #FFD54F inset; }
+        }
+
+        /* Burbujas */
+        .burbujas {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .burbuja {
+            background: radial-gradient(circle at 30% 30%, #ffffff, #80DEEA);
+            border: 2px solid #4DD0E1;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            font-size: 40px;
+            font-weight: bold;
+            color: #006064;
+            cursor: pointer;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.1);
+            user-select: none;
+            -webkit-user-select: none;
+            /* Animación de flotar de cada burbuja */
+            animation: flotarBurbuja 3s infinite alternate ease-in-out;
+            transition: transform 0.2s;
+        }
+
+        .burbuja:nth-child(even) { animation-duration: 4s; animation-direction: alternate-reverse; }
+        .burbuja:active { transform: scale(0.85); }
+
+        @keyframes flotarBurbuja {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-15px); }
+        }
+
+        .oculto { 
+            animation: popAnim 0.3s forwards;
+            pointer-events: none; 
+        }
+
+        @keyframes popAnim {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.8; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* Instrucciones iniciales de audio */
+        #activarAudio {
+            background-color: #FF5252;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 82, 82, 0.4);
+            margin-bottom: 20px;
+            animation: latir 1.5s infinite;
+        }
+
+        @keyframes latir {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <button id="activarAudio" onclick="iniciarJuego()">¡Toca aquí para encender el sonido!</button>
+
+    <div id="juegoCuerpo" style="display:none;">
+        <h1>¡Nando la Nutria!</h1>
+        <p>Mantén presionada la <b>N</b> para que Nando nade rápido.<br>Luego explota las burbujas.</p>
+
+        <div id="escenario">
+            <!-- La nutria animada -->
+            <div id="nutria">🦦</div>
+
+            <!-- Botón del Motor (Aislado) -->
+            <div class="motor" id="btnN">N</div>
+
+            <!-- Botones de Sílabas -->
+            <div class="burbujas">
+                <button class="burbuja" onclick="explotar(this, 'Na', 'Naranja')">NA</button>
+                <button class="burbuja" onclick="explotar(this, 'Ne', 'Nene')">NE</button>
+                <button class="burbuja" onclick="explotar(this, 'Ni', 'Nido')">NI</button>
+                <button class="burbuja" onclick="explotar(this, 'No', 'Noche')">NO</button>
+                <!-- Usamos Nutria para la NU -->
+                <button class="burbuja" onclick="explotar(this, 'Nu', 'Nutria', true)">NU</button> 
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API de Audio Web para efectos de sonido
+        let audioCtx;
+        
+        function iniciarJuego() {
+            // Inicializar el contexto de audio después de la interacción del usuario
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            document.getElementById('activarAudio').style.display = 'none';
+            document.getElementById('juegoCuerpo').style.display = 'block';
+            
+            // Decir hola
+            let saludo = new SpeechSynthesisUtterance("¡Hola! Soy Nando la Nutria. ¡Vamos a jugar!");
+            saludo.lang = 'es-ES';
+            saludo.rate = 1.1;
+            window.speechSynthesis.speak(saludo);
+        }
+
+        // Efecto de sonido de burbuja (Pop)
+        function sonidoPop() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
+            
+            gain.gain.setValueAtTime(1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        // Efecto de motor grave para la letra N
+        let oscMotor, gainMotor;
+        function sonidoMotorPlay() {
+            if (!audioCtx) return;
+            oscMotor = audioCtx.createOscillator();
+            gainMotor = audioCtx.createGain();
+            oscMotor.connect(gainMotor);
+            gainMotor.connect(audioCtx.destination);
+            
+            oscMotor.type = 'triangle';
+            oscMotor.frequency.setValueAtTime(80, audioCtx.currentTime); // Sonido grave y vibrante
+            
+            gainMotor.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainMotor.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.2);
+            
+            oscMotor.start();
+        }
+        function sonidoMotorStop() {
+            if (gainMotor) {
+                gainMotor.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+                setTimeout(() => { if (oscMotor) { oscMotor.stop(); oscMotor = null; } }, 200);
+            }
+        }
+
+        const btnN = document.getElementById('btnN');
+        const nutria = document.getElementById('nutria');
+        let vozN;
+
+        // Función para reproducir el fonema aislado
+        function encenderMotor(e) {
+            if(e) e.preventDefault();
+            btnN.classList.add('vibrar');
+            window.speechSynthesis.cancel();
+            
+            sonidoMotorPlay();
+
+            // Forzamos un sonido sostenido para la N con la voz
+            vozN = new SpeechSynthesisUtterance("nnnnnnnnnnnnnnnn");
+            vozN.lang = 'es-ES';
+            vozN.rate = 0.4;
+            vozN.pitch = 0.8;
+            window.speechSynthesis.speak(vozN);
+        }
+
+        // Función para detener el fonema
+        function apagarMotor(e) {
+            if(e) e.preventDefault();
+            btnN.classList.remove('vibrar');
+            window.speechSynthesis.cancel();
+            sonidoMotorStop();
+        }
+
+        // Eventos táctiles y de mouse para el botón N
+        btnN.addEventListener('mousedown', encenderMotor);
+        btnN.addEventListener('mouseup', apagarMotor);
+        btnN.addEventListener('mouseleave', apagarMotor);
+        btnN.addEventListener('touchstart', encenderMotor, {passive: false});
+        btnN.addEventListener('touchend', apagarMotor);
+        btnN.addEventListener('touchcancel', apagarMotor);
+
+        // Función para las burbujas de sílabas
+        function explotar(elemento, silaba, palabra, esNutria = false) {
+            window.speechSynthesis.cancel();
+            
+            // Sonido y voz
+            sonidoPop();
+            let vozS = new SpeechSynthesisUtterance(`${silaba}! como ${palabra}`);
+            vozS.lang = 'es-ES';
+            vozS.rate = 0.9;
+            window.speechSynthesis.speak(vozS);
+
+            // Animación visual de explotar
+            elemento.classList.add('oculto');
+            
+            // Si es "NU" de Nutria, hacemos que la nutria salte de alegría
+            if (esNutria) {
+                nutria.classList.remove('saltar'); // Reiniciar animación
+                void nutria.offsetWidth; // Truco para forzar reflow y que la animación se repita
+                nutria.classList.add('saltar');
+            }
+            
+            // Regresar la burbuja a los 3 segundos
+            setTimeout(() => {
+                elemento.classList.remove('oculto');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
